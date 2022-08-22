@@ -2,12 +2,12 @@ FROM jjanzic/docker-python3-opencv:opencv-3.2.0
 
 WORKDIR /app
 
-COPY . .
+COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-EXPOSE 5000
+COPY . .
 
-ENV NAME World
+EXPOSE 5000
 
 ENTRYPOINT [ "python3", "app.py" ]

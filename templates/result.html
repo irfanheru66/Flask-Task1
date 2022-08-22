@@ -4,7 +4,7 @@
 
 <div class="card p-3" style="width: 70rem;">
     <div class="card-body">
-        
+
 
         <table class="table">
             <thead>
@@ -20,6 +20,11 @@
                 </td>
                 <td>
                     <img src="{{url_for('static',filename='resultSobel.jpg')}}" width="500px" />
+                    <ul>
+                      <li>{{data[0].name}}</li>
+                      <li>{{data[0].std}}</li>
+                      <li>{{data[0].verdict}}</li>
+                  </ul>
                 </td>
               </tr>
             </tbody>
@@ -36,9 +41,19 @@
               <tr>
                 <td>
                     <img src="{{url_for('static',filename='resultPrewitt.jpg')}}" width="500px" />
+                    <ul>
+                      <li>{{data[1].name}}</li>
+                      <li>{{data[1].std}}</li>
+                      <li>{{data[1].verdict}}</li>
+                  </ul>
                 </td>
                 <td>
                     <img src="{{url_for('static',filename='resultCanny.jpg')}}" width="500px" />
+                    <ul>
+                      <li>{{data[2].name}}</li>
+                      <li>{{data[2].std}}</li>
+                      <li>{{data[2].verdict}}</li>
+                  </ul>
                 </td>
               </tr>
             </tbody>

@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import base64
 
 GaussianBlurSize = (3,3)
 
@@ -125,10 +126,105 @@ def load_prepro(src):
 
     return blurred
 
+def load_prepro64(src):
+    npimg = np.frombuffer(src, dtype=np.uint8)
+    cvImg = cv.imdecode(npimg,1)
+    gray = cv.cvtColor(cvImg, cv.COLOR_BGR2GRAY)
+    blurred = cv.GaussianBlur(gray,GaussianBlurSize,0)
+    return blurred
+
+def verdict(std,stdThreshold):
+    return "Positive Crack" if std > stdThreshold else "Negative Crack"
+
+    
+
 def saves_image(src):
     blurredImg = load_prepro(src)
 
     img_outsobel,Sx,Sy = Sobel(blurredImg)
+    prewitt = Prewitt(blurredImg)
+    canny = Canny(blurredImg)
+
+    sobelStd = img_outsobel.std()
+    prewittStd = prewitt.std()
+    cannyStd = canny.std() 
+
     cv.imwrite(resSobel, img_outsobel)
-    cv.imwrite(resPrewitt, Prewitt(blurredImg))
-    cv.imwrite(resCanny, Canny(blurredImg))
+    cv.imwrite(resPrewitt, prewitt)
+    cv.imwrite(resCanny, canny)
+
+    verdic_data =[
+    {
+        'name':'Sobel',
+        'std': str(sobelStd),
+        'verdict': verdict(sobelStd,9.08),
+    },
+    {
+        'name': 'Prewitt',
+        'std': str(prewittStd) ,
+        'verdict' : verdict(prewittStd,8.35)
+    },
+    {
+        'name': 'Canny',
+        'std': str(cannyStd) ,
+        'verdict' : verdict(cannyStd,2.07)
+    }
+    ]
+
+    return verdic_data
+
+
+
+def saves_image64(src):
+    blurredImg = load_prepro64(src)
+
+    img_outsobel,Sx,Sy = Sobel(blurredImg)
+    prewitt = Prewitt(blurredImg)
+    canny = Canny(blurredImg)
+    
+    sobelStd = img_outsobel.std()
+    prewittStd = prewitt.std()
+    cannyStd = canny.std() 
+
+    cv.imwrite(resSobel, img_outsobel)
+    cv.imwrite(resPrewitt, prewitt)
+    cv.imwrite(resCanny, canny)
+
+    
+
+    with open(resSobel, "rb") as image_file:
+        sobel64 = base64.b64encode(image_file.read())
+    with open(resPrewitt, "rb") as image_file:
+        prewitt64 = base64.b64encode(image_file.read())
+    with open(resCanny, "rb") as image_file:
+        canny64 = base64.b64encode(image_file.read())
+    
+    verdic_data =[
+    {
+        'name':'Sobel',
+        'std': str(sobelStd),
+        'verdict': verdict(sobelStd,9.08),
+    },
+    {
+        'name': 'Prewitt',
+        'std': str(prewittStd) ,
+        'verdict' : verdict(prewittStd,8.35)
+    },
+    {
+        'name': 'Canny',
+        'std': str(cannyStd) ,
+        'verdict' : verdict(cannyStd,2.07)
+    },
+    {
+            "sobelImg" : str(sobel64) ,
+            "prewittImg" :str(prewitt64),
+            "cannyImg" : str(canny64),
+            "statusImg":"success",
+        }
+    ]
+
+    return verdic_data
+    
+
+
+
