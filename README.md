@@ -13,15 +13,15 @@ and will classify it with three diferent edge detections method.
 </p>
 
 # Run this app via Docker
-## `nodeflux_task1:1.0`
+## `irfanheru66/nodeflux_task1`
 
 # Docker Pull
 ```
-docker pull irfanheru66/nodeflux_task1:2.0
+docker pull irfanheru66/nodeflux_task1:3.0
 ```
 # Docker Run
 ```
-docker run -p 5000:5000 irfanheru66/nodeflux_task1:2.0
+docker run -p 5000:5000 irfanheru66/nodeflux_task1:3.0
 ```
 - after that, on your local browser clik localhost:5000
 
